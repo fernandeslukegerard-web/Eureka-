@@ -1,0 +1,35 @@
+{
+  "accounts": [
+    {
+      "id": "dev_luke_gerard",
+      "username": "fernandeslukegerard",
+      "email": "fernandeslukegerard@gmail.com",
+      "salt": "48ae99b33eb696172b2a92676f65a417",
+      "passwordHash": "e069fe9dfe602189346967780ff41e926ac25241faeb81e74d3cf8d0fe8cd2b593243e83d5955c55251411ded6e3345387cbd2e7a004d60f3294c77c1a5b4036",
+      "role": "developer_admin",
+      "permissions": [
+        "manage_curriculum",
+        "ai_generate",
+        "publish_content",
+        "manage_settings"
+      ],
+      "createdAt": "2026-10-01T08:26:00.000Z"
+    },
+    {
+      "id": "dev_primary_01",
+      "username": "eureka_dev",
+      "email": "developer@eureka.internal",
+      "salt": "48ae99b33eb696172b2a92676f65a417",
+      "passwordHash": "e069fe9dfe602189346967780ff41e926ac25241faeb81e74d3cf8d0fe8cd2b593243e83d5955c55251411ded6e3345387cbd2e7a004d60f3294c77c1a5b4036",
+      "role": "developer_admin",
+      "permissions": [
+        "manage_curriculum",
+        "ai_generate",
+        "publish_content",
+        "manage_settings"
+      ],
+      "createdAt": "2026-10-01T07:18:08.806Z"
+    }
+  ],
+  "authorizedFirebaseUids": []
+}

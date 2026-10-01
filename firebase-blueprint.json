@@ -1,0 +1,107 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Student or developer profile document",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Display name of the user" },
+        "grade": { "type": "number", "description": "Student grade level 6-10" },
+        "age": { "type": "number", "description": "Student age" },
+        "gender": { "type": "string", "description": "Student gender preference" },
+        "role": { "type": "string", "enum": ["student", "developer"], "description": "Account role" },
+        "createdAt": { "type": "string", "description": "Creation ISO date" }
+      },
+      "required": ["name", "role"]
+    },
+    "StudentProgress": {
+      "title": "StudentProgress",
+      "description": "User learning progress metrics",
+      "type": "object",
+      "properties": {
+        "completedSubtopics": { "type": "array", "description": "List of completed subtopic IDs" },
+        "questionsAnswered": { "type": "number", "description": "Total exam questions answered" },
+        "accuracy": { "type": "number", "description": "Overall percentage accuracy" },
+        "streak": { "type": "number", "description": "Daily streak count" },
+        "studyTimeMinutes": { "type": "number", "description": "Total study minutes logged" },
+        "lastActiveDate": { "type": "string", "description": "Last active ISO timestamp" }
+      },
+      "required": ["questionsAnswered", "accuracy", "streak"]
+    },
+    "DeveloperAccount": {
+      "title": "DeveloperAccount",
+      "description": "Server-side verified developer authorization record",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "description": "Developer email address" },
+        "username": { "type": "string", "description": "Developer handle" },
+        "role": { "type": "string", "enum": ["developer_admin"], "description": "Role authority" },
+        "authorizedAt": { "type": "string", "description": "Authorization date" }
+      },
+      "required": ["email", "role"]
+    },
+    "CurriculumRecord": {
+      "title": "CurriculumRecord",
+      "description": "Published academic curriculum content",
+      "type": "object",
+      "properties": {
+        "subjectId": { "type": "string", "description": "Associated subject identifier" },
+        "grade": { "type": "number", "description": "Grade level 6 to 10" },
+        "title": { "type": "string", "description": "Topic or subtopic title" },
+        "published": { "type": "boolean", "description": "Publish status" },
+        "updatedAt": { "type": "string", "description": "Last updated timestamp" }
+      },
+      "required": ["subjectId", "grade", "title", "published"]
+    },
+    "CurriculumDraft": {
+      "title": "CurriculumDraft",
+      "description": "Unpublished developer working drafts",
+      "type": "object",
+      "properties": {
+        "subjectId": { "type": "string", "description": "Associated subject identifier" },
+        "grade": { "type": "number", "description": "Grade level" },
+        "title": { "type": "string", "description": "Working draft title" },
+        "draftData": { "type": "string", "description": "Serialized draft payload" },
+        "authorId": { "type": "string", "description": "Developer author ID" }
+      },
+      "required": ["subjectId", "title", "authorId"]
+    },
+    "AdminSetting": {
+      "title": "AdminSetting",
+      "description": "Administrative system and AI configurations",
+      "type": "object",
+      "properties": {
+        "settingKey": { "type": "string", "description": "Unique configuration key" },
+        "settingValue": { "type": "string", "description": "Configuration value payload" },
+        "updatedBy": { "type": "string", "description": "Administrator ID" }
+      },
+      "required": ["settingKey", "settingValue"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile document keyed by auth UID"
+    },
+    "/users/{userId}/progress/{progressId}": {
+      "schema": "StudentProgress",
+      "description": "Subcollection storing student progress"
+    },
+    "/developers/{developerId}": {
+      "schema": "DeveloperAccount",
+      "description": "Verified developer accounts accessible only by admins"
+    },
+    "/curriculum/{curriculumId}": {
+      "schema": "CurriculumRecord",
+      "description": "Published curriculum collections readable by students, writable only by developers"
+    },
+    "/curriculum_drafts/{draftId}": {
+      "schema": "CurriculumDraft",
+      "description": "Sensitive curriculum draft collections strictly restricted to developers"
+    },
+    "/admin_settings/{settingId}": {
+      "schema": "AdminSetting",
+      "description": "Administrative configuration collection strictly restricted to developers"
+    }
+  }
+}

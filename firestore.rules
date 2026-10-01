@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Secure developer check: verifies authorized email or explicit developer claim
+    function isDeveloper() {
+      return isSignedIn() && (
+        request.auth.token.email == 'fernandeslukegerard@gmail.com' ||
+        request.auth.token.email == 'developer@eureka.internal' ||
+        request.auth.token.developer == true
+      );
+    }
+
+    // 1. User profiles & learning records: strictly accessible by the account owner
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      match /progress/{progressId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // 2. Developer authorization records: only developers
+    match /developers/{developerId} {
+      allow read: if isSignedIn() && (request.auth.uid == developerId || isDeveloper());
+      allow write: if isDeveloper();
+    }
+
+    // 3. Published curriculum: students can READ, but CANNOT WRITE or modify
+    match /curriculum/{curriculumId} {
+      allow read: if isSignedIn();
+      allow write: if isDeveloper();
+    }
+
+    // 4. Sensitive curriculum drafts: ONLY developers can READ or WRITE (students blocked)
+    match /curriculum_drafts/{draftId} {
+      allow read, write: if isDeveloper();
+    }
+
+    // 5. Administrative settings & system configuration: ONLY developers (students blocked)
+    match /admin_settings/{settingId} {
+      allow read, write: if isDeveloper();
+    }
+
+    // 6. Developer audit logs
+    match /developer_audit/{logId} {
+      allow read, write: if isDeveloper();
+    }
+
+    // 7. Test collection
+    match /test/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Default deny for all other unmatched collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

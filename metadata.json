@@ -1,0 +1,6 @@
+{
+  "name": "Eureka Science Lab",
+  "description": "Interactive modern STEM and academic learning platform for Grades 6-10 with discovery-first simulations, Cambridge-aligned curriculum, and real practice.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
